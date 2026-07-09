@@ -1,0 +1,17 @@
+# Mini Cookpad - CodeIgniter 4 .htaccess
+
+RewriteEngine On
+
+# Send would-be 404 requests to CodeIgniter
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ index.php/$1 [L]
+
+# Prevent directory browsing
+Options -Indexes
+
+# Protect sensitive files
+<FilesMatch "\.(env|md|json|lock)$">
+    Order allow,deny
+    Deny from all
+</FilesMatch>

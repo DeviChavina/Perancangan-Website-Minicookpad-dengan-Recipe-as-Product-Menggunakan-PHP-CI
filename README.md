@@ -1,60 +1,47 @@
-# Mini Cookpad v2 — Sistem Koin & Dual Chef Verification
+# 🍳 Mini Cookpad — Sistem Koin & Dual Chef Verification
 
-## Cara Menjalankan
+Platform berbagi resep masakan berbasis web, dengan sistem koin buat unlock resep premium dan verifikasi chef.
 
-```bash
-cd cookpad-v2
-composer install
+## Teknologi
+- **PHP**: >= 8.1
+- **Framework**: CodeIgniter 4 (v4.5.8)
+- **Database**: MySQL
+- **Server**: XAMPP / built-in server (`php spark serve`)
 
-# Edit .env → sesuaikan password MySQL
-# Buat database: CREATE DATABASE mini_cookpad ...
+## Fitur
+- Manajemen resep (tambah, edit, hapus) oleh chef
+- Resep gratis & resep premium (unlock pakai koin)
+- Sistem top-up koin (5 paket, Rp 5.000 – Rp 150.000)
+- Dual chef verification: Basic (upload KTP) & Advanced (upload sertifikat)
+- Bagi hasil koin ke chef tiap resep premium di-unlock (50% / 70%)
+- Bookmark resep
+- Dashboard admin buat approve verifikasi chef
 
-php spark migrate        # Jalankan migrasi (v1 + v2)
-php spark db:seed InitialSeeder
-php spark serve
-```
-
-Buka: **http://localhost:8080**
-
----
+## Cara Install
+1. `composer install`
+2. **Penting:** pastikan folder `app` sejajar dengan `public`, `vendor`, `writable` (jangan sampai nyasar ke dalam folder lain)
+3. Buat database `mini_cookpad`
+4. Sesuaikan `.env` dengan konfigurasi database kamu
+5. `php spark migrate`
+6. `php spark db:seed InitialSeeder`
+7. `php spark serve`
+8. Akses: `http://localhost:8080`
 
 ## Akun Demo
+| Role              | Email                     | Password |
+|-------------------|---------------------------|----------|
+| Admin             | admin@cookpad.com         | admin123 |
+| Chef Verified     | chef.rina@cookpad.com     | chef123  |
+| Chef Verified     | chef.takeshi@cookpad.com  | chef123  |
+| Chef (belum verif)| chef.marco@cookpad.com    | chef123  |
+| User Free         | user.andi@cookpad.com     | user123  |
+| User Free         | user.sari@cookpad.com     | user123  |
 
-| Role            | Email                     | Password |
-|-----------------|---------------------------|----------|
-| Admin           | admin@cookpad.com         | admin123 |
-| Chef Verified   | chef.rina@cookpad.com     | chef123  |
-| Chef Verified   | chef.takeshi@cookpad.com  | chef123  |
-| Chef (Unverif.) | chef.marco@cookpad.com    | chef123  |
-| User Free       | user.andi@cookpad.com     | user123  |
-| User Free       | user.sari@cookpad.com     | user123  |
+## Struktur Database
+10 tabel: `users`, `chef_verifications`, `recipes`, `ingredients`, `steps`, `bookmarks`, `coin_packages`, `coin_topups`, `coin_transactions`, `recipe_unlocks`.
 
----
-
-## Fitur Baru v2
-
-### 🪙 Sistem Koin (Ganti Subscription)
-- Beli koin dengan Rupiah via QRIS / Virtual Account
-- Harga paket: 10 koin (Rp 5.000) s/d 500+200 koin (Rp 150.000)
-- Resep premium dibeli per-unlock dengan koin (5–50 koin/resep)
-- Riwayat transaksi koin lengkap
-
-### 👨‍🍳 Dual Chef Verification
-| Jalur | Syarat | Hasil | Revenue |
-|-------|--------|-------|---------|
-| Basic | Upload KTP | Role: Chef | 50% per unlock |
-| Advanced | Upload Sertifikat | Role: Chef Verified | 70% per unlock |
-
-### 💰 Bagi Hasil Resep Premium
-- **Chef Verified**: 70% koin, platform 30%
-- **Chef biasa**: 50% koin, platform 50%
-- Contoh resep harga 10 koin → Chef Verified dapat 7 koin, Chef biasa 5 koin
-
-### Paket Koin
-| Paket   | Koin     | Bonus | Harga      |
-|---------|----------|-------|------------|
-| Starter | 10       | 0     | Rp 5.000   |
-| Basic   | 50       | +5    | Rp 20.000  |
-| Popular | 100      | +20   | Rp 45.000  |
-| Pro     | 200      | +60   | Rp 80.000  |
-| Master  | 500      | +200  | Rp 150.000 |
+## Alur Singkat
+- **Verifikasi chef**: user daftar → upload KTP (jadi Chef, 50% bagi hasil) atau upload sertifikat (jadi Chef Verified, 70% bagi hasil) → admin approve.
+- **Unggah resep**: chef bikin resep, tentukan gratis atau premium (isi harga koin).
+- **Beli resep premium**: user top-up koin dulu → koin dipakai buat unlock resep → koin otomatis kebagi ke chef sesuai persentase.
+- **Top-up koin**: user pilih paket → bayar → saldo koin bertambah sesuai paket + bonus.
